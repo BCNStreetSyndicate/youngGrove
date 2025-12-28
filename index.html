@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOTES FROM CATALONIA — Три куста, один кабан, ноль шансов</title>
+  <meta name="description" content="Кислотный неоновый лонгрид: как школьники решили гровить в лесу под Барселоной — и почему лес всегда выигрывает." />
+
+  <style>
+    :root{
+      /* ACID NEON PALETTE */
+      --bg0:#02010a;
+      --bg1:#030016;
+      --ink: rgba(255,255,255,.93);
+      --muted: rgba(255,255,255,.72);
+      --line: rgba(255,255,255,.14);
+
+      --neonA:#00FFB3;   /* mint toxic */
+      --neonB:#00B3FF;   /* electric blue */
+      --neonC:#B6FF00;   /* nuclear green */
+      --neonD:#FF2EDC;   /* hot magenta */
+      --neonE:#FF7A00;   /* orange punch */
+      --neonF:#A100FF;   /* ultraviolet */
+
+      --blood:#ff3b3b;
+
+      --shadow: 0 20px 70px rgba(0,0,0,.68);
+      --r: 18px;
+      --r2: 28px;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+      --paranoia: 0; /* 0..100 */
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      line-height:1.72;
+      overflow-x:hidden;
+
+      background:
+        radial-gradient(1000px 520px at 8% -10%, rgba(255,46,220,.38), transparent 60%),
+        radial-gradient(950px 520px at 92% 0%, rgba(0,255,179,.26), transparent 60%),
+        radial-gradient(900px 640px at 45% 110%, rgba(182,255,0,.16), transparent 62%),
+        radial-gradient(850px 520px at 75% 80%, rgba(161,0,255,.16), transparent 65%),
+        radial-gradient(700px 440px at 20% 75%, rgba(255,122,0,.12), transparent 68%),
+        linear-gradient(180deg, var(--bg1), var(--bg0) 45%, #000);
+    }
+
+    /* grain */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.12;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+      z-index:1;
+    }
+
+    /* subtle scanlines (always-on light version) */
+    body::after{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity: calc(.06 + (var(--paranoia) * .0016));
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.06) 0px,
+        rgba(255,255,255,.06) 1px,
+        transparent 2px,
+        transparent 6px
+      );
+      mix-blend-mode: overlay;
+      z-index:2;
+    }
+
+    /* progress */
+    .progress{
+      position:fixed; inset:0 0 auto 0;
+      height:4px; z-index:90;
+      background:transparent;
+    }
+    .progress i{
+      display:block; height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--neonC), var(--neonA), var(--neonB), var(--neonF), var(--neonD), var(--neonE));
+      box-shadow:0 0 28px rgba(0,255,179,.18);
+    }
+
+    /* topbar */
+    .topbar{
+      position:sticky; top:0;
+      z-index:80;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,0));
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      max-width:1180px;
+      margin:0 auto;
+      padding:12px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-weight:950;
+      font-size:12px;
+    }
+    .brand .tag{
+      letter-spacing:.06em;
+      font-weight:850;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(255,255,255,.05);
+      color:var(--muted);
+    }
+
+    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn{
+      cursor:pointer;
+      border-radius:999px;
+      padding:9px 12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:var(--ink);
+      transition:.15s transform, .15s background, .15s border-color, .15s filter;
+      display:flex; align-items:center; gap:8px;
+      font-size:13px;
+      user-select:none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background:rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.30);
+      filter:saturate(1.2);
+    }
+    .btn kbd{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--muted);
+      background:rgba(0,0,0,.22);
+    }
+
+    /* layout */
+    .wrap{
+      position:relative; z-index:3;
+      max-width:1180px;
+      margin:0 auto;
+      padding:22px 16px 90px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:16px;
+    }
+    @media (max-width: 1020px){
+      .wrap{ grid-template-columns:1fr; }
+      .aside{ order:-1; position:relative !important; top:auto !important; }
+    }
+
+    .card{
+      border-radius:var(--r);
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .pad{ padding:18px; }
+
+    /* NEON FRONT */
+    .front{
+      border-radius:var(--r2);
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(820px 320px at 12% 0%, rgba(255,46,220,.40), transparent 60%),
+        radial-gradient(820px 320px at 88% 10%, rgba(0,255,179,.26), transparent 60%),
+        radial-gradient(900px 520px at 60% 120%, rgba(182,255,0,.16), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      position:relative;
+      isolation:isolate;
+    }
+    .front::after{
+      content:"";
+      position:absolute; inset:-2px;
+      border-radius:var(--r2);
+      pointer-events:none;
+      background:
+        linear-gradient(90deg,
+          rgba(0,255,179,.26),
+          rgba(0,179,255,.18),
+          rgba(161,0,255,.18),
+          rgba(255,46,220,.20),
+          rgba(182,255,0,.16),
+          rgba(255,122,0,.14)
+        );
+      filter: blur(26px);
+      opacity:.62;
+      z-index:0;
+    }
+    .front .pad{ padding:24px; position:relative; z-index:1; }
+
+    .frontTop{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+      margin-bottom:8px;
+    }
+    .logoMark{
+      font-family:var(--mono);
+      font-weight:950;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,.80);
+      padding:8px 10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.24);
+    }
+    .frontBadge{
+      font-family:var(--mono);
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:#07070d;
+      padding:8px 10px;
+      border-radius:14px;
+      border:2px solid rgba(0,0,0,.80);
+      background: linear-gradient(90deg, var(--neonC), var(--neonA));
+      box-shadow: 0 16px 44px rgba(0,0,0,.35);
+      transform: rotate(2deg);
+    }
+    .frontTitle{
+      margin:12px 0 10px;
+      font-family:var(--serif);
+      font-size: clamp(34px, 4vw, 60px);
+      line-height:1.03;
+      letter-spacing:-.02em;
+      text-shadow: 0 10px 30px rgba(0,0,0,.48);
+    }
+    .frontTitle .neon{
+      background: linear-gradient(90deg, var(--neonD), var(--neonF), var(--neonB));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:none;
+    }
+    .frontSub{
+      margin:0;
+      max-width:86ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+    .frontCTA{
+      margin-top:16px;
+      display:flex; flex-wrap:wrap; gap:10px;
+      align-items:center;
+    }
+    .cta{
+      cursor:pointer;
+      border-radius:999px;
+      padding:10px 14px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      color:var(--ink);
+      font-weight:900;
+      transition:.15s transform, .15s filter;
+    }
+    .cta:hover{ transform: translateY(-1px); filter:saturate(1.25); }
+    .cta.primary{
+      background: linear-gradient(90deg, rgba(255,46,220,.92), rgba(0,255,179,.72));
+      border-color: rgba(255,255,255,.10);
+      color:#07070d;
+    }
+    .miniLine{
+      margin-top:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.70);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .miniLine .pill{
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,.22);
+      background:rgba(0,0,0,.18);
+      color:var(--muted);
+    }
+
+    /* glitch */
+    .glitch{
+      position:relative;
+      display:inline-block;
+    }
+    .glitch::before, .glitch::after{
+      content: attr(data-text);
+      position:absolute; left:0; top:0;
+      opacity:.55;
+      pointer-events:none;
+      mix-blend-mode:screen;
+    }
+    .glitch::before{ transform: translate(1px,-1px); color: var(--neonB); }
+    .glitch::after{ transform: translate(-1px,1px); color: var(--neonD); }
+
+    /* article */
+    .article{ padding:20px; }
+    .article h2{
+      margin:26px 0 10px;
+      font-size:18px;
+      letter-spacing:-.01em;
+    }
+    .lead{ font-size:18px; margin:0 0 10px; }
+    .muted{ color:var(--muted); }
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent);
+      margin:18px 0;
+    }
+    .quote{
+      margin:16px 0;
+      padding:16px;
+      border-radius: var(--r);
+      border:1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(161,0,255,.12), rgba(255,255,255,.03));
+      position:relative;
+      overflow:hidden;
+    }
+    .quote b{ color: var(--neonC); }
+    .quote p{ margin:0; }
+    .quote small{ display:block; margin-top:10px; color:var(--muted); }
+
+    .callout{
+      border-radius: var(--r);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.24);
+      padding:14px;
+      margin:14px 0;
+    }
+    .callout .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      font-family:var(--mono);
+      font-weight:950;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#07070d;
+      background: linear-gradient(90deg, var(--neonE), var(--neonD));
+      padding:5px 9px;
+      border-radius:999px;
+    }
+    .callout p{ margin:10px 0 0; color:var(--muted); }
+
+    /* images */
+    figure{ margin:16px 0; }
+    .photo{
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.04);
+      box-shadow: 0 16px 44px rgba(0,0,0,.45);
+      position:relative;
+    }
+    .photo img{
+      width:100%;
+      display:block;
+      cursor: zoom-in;
+      filter:
+        contrast(calc(1.06 + var(--paranoia)*.001))
+        saturate(calc(1.18 + var(--paranoia)*.002))
+        drop-shadow(calc(var(--paranoia)*0.02px) 0 rgba(0,179,255,.35))
+        drop-shadow(calc(var(--paranoia)*-0.02px) 0 rgba(255,46,220,.35));
+    }
+    figcaption{
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      border-top:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    .scribble{
+      position:absolute;
+      left:12px; top:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,.28);
+      background: rgba(0,0,0,.22);
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      transform: rotate(-2deg);
+    }
+    .scribble strong{ color: var(--neonA); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width: 540px){ .grid{ grid-template-columns:1fr; } }
+    .thumb{
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.04);
+      position:relative;
+    }
+    .thumb img{
+      width:100%;
+      height:185px;
+      object-fit:cover;
+      display:block;
+      cursor:zoom-in;
+      transition:.18s transform;
+      filter: saturate(1.15) contrast(1.04);
+    }
+    .thumb:hover img{ transform:scale(1.03); }
+    .thumb span{
+      position:absolute;
+      left:10px; bottom:10px;
+      padding:5px 9px;
+      border-radius:999px;
+      font-family:var(--mono);
+      font-size:12px;
+      background: rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+      color:var(--muted);
+      backdrop-filter: blur(8px);
+    }
+
+    /* aside */
+    .aside{
+      position:sticky;
+      top:70px;
+      align-self:start;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .toc h3{
+      margin:0 0 10px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .toc a{
+      display:block;
+      padding:10px 12px;
+      border-radius:14px;
+      text-decoration:none;
+      color:var(--ink);
+      border:1px solid transparent;
+      transition:.14s background, .14s border-color, .14s transform;
+    }
+    .toc a:hover{
+      background:rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.18);
+      transform: translateY(-1px);
+    }
+    .toc a.active{
+      background: linear-gradient(90deg, rgba(0,255,179,.14), rgba(255,46,220,.10));
+      border-color: rgba(0,255,179,.40);
+    }
+
+    /* HUD */
+    .hud{
+      padding:14px;
+      background: rgba(0,0,0,.26);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: var(--r);
+    }
+    .hud .hdr{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:950;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .hud .hdr .live{
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color: var(--neonE);
+    }
+    .bars{ margin-top:10px; display:grid; gap:10px; }
+    .barrow{ display:grid; gap:6px; }
+    .barrow .label{
+      display:flex; justify-content:space-between; gap:10px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .meter{
+      height:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .meter i{
+      display:block;
+      height:100%;
+      width:100%;
+      background: linear-gradient(90deg, var(--neonC), var(--neonA), var(--neonB));
+      transition: width .35s ease;
+    }
+    .meter.boar i{
+      background: linear-gradient(90deg, var(--neonE), var(--blood));
+      box-shadow: 0 0 22px rgba(255,59,59,.25);
+    }
+
+    .debuffs{
+      margin-top:12px;
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .chip{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.18);
+    }
+    .chip.bad{ border-color: rgba(255,59,59,.35); color: rgba(255,122,0,.95); }
+    .chip.good{ border-color: rgba(0,255,179,.35); color: rgba(0,255,179,.95); }
+
+    /* paranoia slider */
+    .parabox{
+      margin-top:12px;
+      padding:12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .parabox .k{
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:950;
+      font-size:11px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+    .parabox .k b{ color: var(--neonC); }
+    .parabox input[type="range"]{
+      width:100%;
+      margin-top:10px;
+      accent-color: var(--neonD);
+    }
+    .parabox .hint{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* counters */
+    .counters{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    .counter{
+      padding:12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .counter .k{
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:950;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .counter .v{
+      margin-top:6px;
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:-.02em;
+    }
+
+    /* BOAR ALERT */
+    .boarAlert{
+      position:fixed;
+      left:50%;
+      transform: translateX(-50%);
+      top:62px;
+      z-index:120;
+      display:none;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.70);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      max-width: min(980px, 92vw);
+    }
+    .boarAlert.show{ display:flex; }
+    .sir{
+      width:12px; height:12px;
+      border-radius: 999px;
+      background: var(--blood);
+      box-shadow: 0 0 20px rgba(255,59,59,.35);
+      animation: blink .6s infinite;
+    }
+    @keyframes blink{ 0%,50%{ opacity:1 } 51%,100%{ opacity:.25 } }
+    .boarAlert b{
+      font-family:var(--mono);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: var(--neonE);
+      font-weight:950;
+      font-size:12px;
+    }
+    .boarAlert span{
+      color: var(--muted);
+      font-size:13px;
+    }
+    .boarAlert .x{
+      margin-left:auto;
+      cursor:pointer;
+      border-radius:12px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color:var(--ink);
+      font-family:var(--mono);
+    }
+
+    /* toast */
+    .toast{
+      position:fixed;
+      z-index:140;
+      left:18px;
+      bottom:18px;
+      display:none;
+      max-width:min(520px, 92vw);
+      border-radius:18px;
+      background: rgba(0,0,0,.74);
+      border:1px solid rgba(255,255,255,.18);
+      padding:12px 12px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.65);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .toast.show{ display:block; animation: pop .22s ease; }
+    @keyframes pop{ from{ transform: translateY(8px); opacity:0 } to{ transform: translateY(0); opacity:1 } }
+    .toast .top{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+    }
+    .toast .who{
+      display:flex; gap:10px; align-items:center;
+      font-family:var(--mono);
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-weight:950;
+      font-size:12px;
+      color: var(--neonC);
+    }
+    .toast .who .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(90deg, var(--neonD), var(--neonF));
+      box-shadow:0 0 18px rgba(255,46,220,.20);
+    }
+    .toast .close{
+      cursor:pointer;
+      border-radius:12px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color:var(--ink);
+      font-family:var(--mono);
+    }
+    .toast p{ margin:10px 0 0; color:var(--muted); }
+    .toast .mini{
+      margin-top:10px;
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .toast .mini .chip{ background: rgba(255,255,255,.04); }
+
+    /* lightbox */
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.86);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:200;
+      padding:18px;
+    }
+    .lightbox.open{ display:flex; }
+    .lightbox .box{
+      max-width:min(1020px, 96vw);
+      max-height: 86vh;
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.20);
+      box-shadow: 0 20px 60px rgba(0,0,0,.65);
+      background: rgba(15,15,20,.7);
+    }
+    .lightbox img{
+      display:block;
+      width:100%;
+      height:auto;
+      max-height: 78vh;
+      object-fit:contain;
+      background:#0c0c10;
+    }
+    .lightbox .cap{
+      padding:10px 12px;
+      color:var(--muted);
+      border-top:1px solid rgba(255,255,255,.12);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      font-size:13px;
+    }
+    .xbtn{
+      cursor:pointer;
+      border-radius:12px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color:var(--ink);
+      font-family:var(--mono);
+    }
+
+    /* img errors panel */
+    .imgErrors{
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(255,255,255,.80);
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+    }
+    .imgErrors b{ color: var(--neonE); }
+    .imgErrors .list{ margin-top:8px; color: var(--muted); }
+    .imgErrors .list div{ margin:4px 0; }
+
+    footer{
+      position:relative; z-index:3;
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 16px 36px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    footer .foot{
+      border-top:1px solid rgba(255,255,255,.14);
+      padding-top:16px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress"><i id="bar"></i></div>
+
+  <!-- BOAR ALERT -->
+  <div class="boarAlert" id="boarAlert" role="status" aria-live="polite">
+    <div class="sir"></div>
+    <b>BOAR ALERT</b>
+    <span>Ты приближаешься к главе “Ураган, ночь и кабан”. Сохраняйся. Лес не обещал быть адекватным.</span>
+    <button class="x" id="boarAlertClose" type="button">OK</button>
+  </div>
+
+  <!-- MEME TOAST -->
+  <div class="toast" id="toast" aria-live="polite">
+    <div class="top">
+      <div class="who"><span class="dot"></span><span id="toastWho">ЛЕС.COM</span></div>
+      <button class="close" id="toastClose" type="button">закрыть</button>
+    </div>
+    <p id="toastText">…</p>
+    <div class="mini" id="toastMini"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span>NOTES FROM CATALONIA</span>
+        <span class="tag">acid neon • лонгрид • лес • кабан</span>
+      </div>
+      <div class="actions">
+        <button class="btn" id="goStory" type="button">📖 читать <kbd>R</kbd></button>
+        <button class="btn" id="goGallery" type="button">🖼️ фотки <kbd>G</kbd></button>
+        <button class="btn" id="spawnToast" type="button">💬 мем-коммент <kbd>M</kbd></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <!-- FRONT PAGE -->
+      <article class="card front" id="top">
+        <div class="pad">
+          <div class="frontTop">
+            <div class="logoMark">CATALONIA FILES // EP. “<span class="glitch" data-text="КАБАН">КАБАН</span>”</div>
+            <div class="frontBadge">НЕ ПОВТОРЯТЬ*</div>
+          </div>
+
+          <h1 class="frontTitle">
+            Три куста. Один кабан.<br/>
+            И <span class="neon">лес</span>, который решил вас воспитывать.
+          </h1>
+
+          <p class="frontSub">
+            Двое школьников, ноль опыта, один ручей и уверенность уровня “мы читали интернет”.
+            Спойлер: лес оказался не декорацией, а NPC с агрессией и системой лута.
+          </p>
+
+          <div class="frontCTA">
+            <button class="cta primary" id="ctaRead">Открыть лонгрид →</button>
+            <button class="cta" id="ctaPics">Сразу к фоткам</button>
+          </div>
+
+          <div class="miniLine">
+            <span class="pill">жанр: “гениальные решения подростков”</span>
+            <span class="pill">локация: Les Planes</span>
+            <span class="pill">босс: кабан</span>
+          </div>
+
+          <div class="callout" style="margin-top:16px;">
+            <span class="badge">*Дисклеймер</span>
+            <p>Это не руководство. Это хронология того, как “ну а чё бы нет” превращается в “мам, я живой”.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ARTICLE -->
+      <article class="card article" id="story">
+        <p class="lead">
+          Когда нормальные люди покупают тетрадки, эти двое покупают “надежду в упаковке”.
+          План звучал красиво: “посадим в лесу — никто не увидит”.
+          <span class="muted">Лес тоже так подумал. И включил запись.</span>
+        </p>
+
+        <figure class="photo" data-cap="Лес. Красиво, да? А теперь представь это ночью, мокрым и с ощущением, что тебя оценивают ветки.">
+          <span class="scribble"><strong>локация:</strong> “кажется, тут кто-то живёт”</span>
+          <img src="./photos/01-forest.jpg" alt="Лесной овраг и плотная зелень" />
+          <figcaption>Лес. Красиво, да? А теперь представь это ночью, мокрым и с ощущением, что тебя оценивают ветки.</figcaption>
+        </figure>
+
+        <div class="quote">
+          <p><b>Правило:</b> если идея пришла “сама” — значит, она из отдела “плохие идеи”. В комплекте: колючки, дождь и кабан-модератор.</p>
+          <small>— внутренний голос (тот самый, вредный)</small>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2 id="step0">Шаг 0 — Идея</h2>
+        <p>
+          Зима. Начало года. Денег — как у школьника. Опыта — как у школьника.
+          Зато уверенности — как у школьника, который прочитал два поста и уже “шарит”.
+          И идея приходит как все лучшие идеи: <span class="muted">сама, внезапно и с подлянкой.</span>
+        </p>
+
+        <h2 id="montseny">Montseny: романтика, пока не познакомился с почвой</h2>
+        <p>
+          Сначала понравился Parc de Montseny: вода, родники, красота.
+          Потом выяснилось, что земля там — смесь камня, корней и фразы “таскай грунт сам”.
+          Идея умирает достойно: без церемоний и с матом.
+        </p>
+
+        <h2 id="lesplanes">Les Planes: на карте “милый лесочек”, в жизни “Амазонка: Directors Cut”</h2>
+        <p>
+          На карте — проход. В реальности — всё режется, колется, мокнет и кусается.
+          Подъёмы/спуски такие, будто местность проектировал демон-альпинист.
+        </p>
+
+        <figure class="photo" data-cap="Спуск к споту. Вниз — легко. Назад — пусть молится ваш пресс.">
+          <span class="scribble"><strong>аттракцион:</strong> “лестница боли”</span>
+          <img src="./photos/03-stairs.jpg" alt="Лестница/спуск в зелёной зоне" />
+          <figcaption>Спуск к споту. Вниз — легко. Назад — пусть молится ваш пресс.</figcaption>
+        </figure>
+
+        <h2 id="spring">Весна: “проверим, выросло ли чудо”</h2>
+        <p>
+          Семена без проращивания, одна маленькая лопатка, один пакетик земли “для цветов” и уверенность “и так сойдёт”.
+          В Les Planes ночью холодно. Насекомые голодные. И, как выяснится позже, кабаны — тоже.
+          Возвращаются — и видят результат: <b>ничего</b>. Это был тестовый запуск провала.
+        </p>
+
+        <figure class="photo" data-cap="Земля: 1. Школьники: 0. Лопатка: RIP.">
+          <span class="scribble"><strong>режим:</strong> “лопата сломалась”</span>
+          <img src="./photos/05-hole.jpg" alt="Ямка в земле" />
+          <figcaption>Земля: 1. Школьники: 0. Лопатка: RIP.</figcaption>
+        </figure>
+
+        <h2 id="restart">Рестарт: “теперь мы эксперты”</h2>
+        <p>
+          Закупка №2: ростки Ruby Violet, нормальная земля, удобрения, инструменты, защита от насекомых.
+          Сажают один куст “по уму”. И тут природа такая: “а давай ураган”.
+        </p>
+
+        <h2 id="gallery">Фотки</h2>
+        <div class="grid">
+          <div class="thumb" data-cap="Закупка. Момент, когда ты думаешь, что стал персонажем RPG.">
+            <img src="./photos/07-supplies.jpg" alt="Набор удобрений" />
+            <span>“мы почти профи”</span>
+          </div>
+          <div class="thumb" data-cap="Домашний этап. Без кабанов, с иллюзией контроля.">
+            <img src="./photos/08-homeplants.jpg" alt="Растения в горшках" />
+            <span>“домашние дети”</span>
+          </div>
+          <div class="thumb" data-cap="Лайфстайл отдела 'мы серьёзные'.">
+            <img src="./photos/06-desk.jpg" alt="Стол/атрибутика" />
+            <span>“креативный отдел”</span>
+          </div>
+          <div class="thumb" data-cap="Полевые работы. Два человека, ручей, и вопрос: 'зачем'.">
+            <img src="./photos/04-digging.jpg" alt="Копают у ручья" />
+            <span>“полевые работы”</span>
+          </div>
+        </div>
+
+        <h2 id="boar">Ураган, ночь и кабан (главный босс сезона)</h2>
+        <p>
+          В тот самый шторм они едут проверить куст.
+          Ночь, вода, грязь, героизм на минималках.
+          Куст смыло.
+          И тут появляется он: <span class="glitch" data-text="кабан">кабан</span>.
+          Стоит. Смотрит. Рычит.
+          У них из оружия — лопата.
+          В этот момент “проект” перестаёт быть важным. Важным становится <b>выжить</b>.
+        </p>
+
+        <div class="quote">
+          <p><b>Оружие:</b> лопата. <b>План:</b> отсутствует. <b>Смысл жизни:</b> внезапно появился.</p>
+          <small>— краткое содержание сцены “мы уже не про кусты”</small>
+        </div>
+
+        <h2 id="finale">Сентябрь: финал без титров</h2>
+        <p>
+          В сентябре они возвращаются “за урожаем”, слегка прибухнув (как настоящие стратеги),
+          с мешками и инструментами.
+          Спуск — отдельный цирк.
+          Приходят — а там всё разрыто и украдено.
+          Даже инструменты.
+          Лес оставил вам единственное: <b>историю</b>.
+        </p>
+
+        <figure class="photo" data-cap="Маленький росток. Большие амбиции. Реальность — как всегда, с дубинкой.">
+          <span class="scribble"><strong>жанр:</strong> “надежда”</span>
+          <img src="./photos/02-seedling.jpg" alt="Росток" />
+          <figcaption>Маленький росток. Большие амбиции. Реальность — как всегда, с дубинкой.</figcaption>
+        </figure>
+
+        <div class="divider"></div>
+
+        <h2 id="moral">Вывод</h2>
+        <p>
+          Каталонский партизанский аутдор — это 90% “а могло случиться что угодно”,
+          и оставшиеся 10% — “оно и случилось”.
+          Кабаны, насекомые, дожди, люди-лутеры — полный сезон.
+          Зато воспоминания — навсегда.
+        </p>
+
+        <div class="callout">
+          <span class="badge">мораль</span>
+          <p>Иногда жизнь даёт урок. Иногда — кабан. Иногда оба сразу, и ты без конспекта.</p>
+        </div>
+
+        <p class="muted">Автор: <b>@saintvoid911</b> • NOTES FROM CATALONIA</p>
+      </article>
+    </section>
+
+    <aside class="aside">
+      <div class="card pad toc">
+        <h3>Оглавление</h3>
+        <nav id="toc">
+          <a href="#top">Главная</a>
+          <a href="#step0">Идея</a>
+          <a href="#montseny">Montseny</a>
+          <a href="#lesplanes">Les Planes</a>
+          <a href="#spring">Весна</a>
+          <a href="#restart">Рестарт</a>
+          <a href="#gallery">Фотки</a>
+          <a href="#boar">Кабан</a>
+          <a href="#finale">Финал</a>
+          <a href="#moral">Вывод</a>
+        </nav>
+      </div>
+
+      <div class="card pad">
+        <div class="hud" id="hud">
+          <div class="hdr">
+            <span>RPG HUD</span>
+            <span class="live">LIVE</span>
+          </div>
+
+          <div class="bars">
+            <div class="barrow">
+              <div class="label"><span>HP: Кабан</span><span id="boarHpText">100%</span></div>
+              <div class="meter boar"><i id="boarHp" style="width:100%"></i></div>
+            </div>
+            <div class="barrow">
+              <div class="label"><span>HP: Школьники</span><span id="kidsHpText">100%</span></div>
+              <div class="meter"><i id="kidsHp" style="width:100%"></i></div>
+            </div>
+            <div class="barrow">
+              <div class="label"><span>Надежда</span><span id="hopeText">100%</span></div>
+              <div class="meter"><i id="hope" style="width:100%"></i></div>
+            </div>
+          </div>
+
+          <div class="debuffs">
+            <span class="chip bad">дебафф: колючки</span>
+            <span class="chip bad">дебафф: грязь</span>
+            <span class="chip bad">дебафф: “мы шарим”</span>
+            <span class="chip good">бафф: упрямство</span>
+          </div>
+
+          <div class="parabox">
+            <div class="k">
+              <span>уровень паранойи</span>
+              <span><b id="paranoiaValue">0%</b></span>
+            </div>
+            <input id="paranoiaSlider" type="range" min="0" max="100" value="0" />
+            <div class="hint" id="paranoiaHint">Пока спокойно. Лес просто смотрит.</div>
+          </div>
+
+          <div class="counters">
+            <div class="counter">
+              <div class="k">падения</div>
+              <div class="v" id="falls">0</div>
+            </div>
+            <div class="counter">
+              <div class="k">укусы</div>
+              <div class="v" id="bites">0</div>
+            </div>
+            <div class="counter">
+              <div class="k">мат</div>
+              <div class="v" id="swears">0</div>
+            </div>
+            <div class="counter">
+              <div class="k">“ай бля”</div>
+              <div class="v" id="aiblya">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="imgErrors card pad" id="imgErrors" style="display:none;">
+        <b>⚠ Фото не найдены</b>
+        <div class="list" id="imgErrorsList"></div>
+        <div style="margin-top:10px; color:var(--muted);">
+          Проверь папку <b>photos/</b> и имена файлов (регистр/пробелы/кириллица).
+        </div>
+      </div>
+
+      <div class="card pad">
+        <div style="font-family:var(--mono); color:var(--muted); font-weight:950; letter-spacing:.10em; text-transform:uppercase; font-size:12px;">
+          Горячие клавиши
+        </div>
+        <div class="muted" style="margin-top:10px; font-size:13px;">
+          <b style="color:var(--neonC)">R</b> — читать<br/>
+          <b style="color:var(--neonC)">G</b> — фотки<br/>
+          <b style="color:var(--neonC)">M</b> — мем-коммент<br/>
+          <b style="color:var(--neonC)">Esc</b> — закрыть фото/тост/алерт
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="foot">
+      <div>© NOTES FROM CATALONIA • “лес — это не место, это настроение”</div>
+      <div>если слышишь хрюк — это не саунд-дизайн, это сюжет</div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="box" role="dialog" aria-modal="true">
+      <img id="lightboxImg" alt="" />
+      <div class="cap">
+        <span id="lightboxCap">—</span>
+        <button class="xbtn" id="lightboxClose" type="button">CLOSE [ESC]</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Progress bar =====
+    const bar = document.getElementById('bar');
+    function onScroll(){
+      const doc = document.documentElement;
+      const top = doc.scrollTop || document.body.scrollTop;
+      const h = doc.scrollHeight - doc.clientHeight;
+      const pct = h > 0 ? (top / h) * 100 : 0;
+      bar.style.width = pct.toFixed(2) + '%';
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    // ===== TOC active =====
+    const tocLinks = [...document.querySelectorAll('#toc a')];
+    function currentSectionId(){
+      const els = [...document.querySelectorAll('#story h2[id], #top, #gallery')];
+      let best = 'top', bestTop = -Infinity;
+      for (const el of els){
+        const r = el.getBoundingClientRect();
+        if (r.top <= 120 && r.top > bestTop){
+          bestTop = r.top;
+          best = el.id || 'top';
+        }
+      }
+      return best;
+    }
+    function updateTOC(){
+      const id = currentSectionId();
+      tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    }
+    window.addEventListener('scroll', updateTOC, {passive:true});
+    updateTOC();
+
+    // ===== CTA Buttons =====
+    const goStory = ()=> document.getElementById('story').scrollIntoView({behavior:'smooth', block:'start'});
+    const goGallery = ()=> document.getElementById('gallery').scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('goStory').addEventListener('click', goStory);
+    document.getElementById('goGallery').addEventListener('click', goGallery);
+    document.getElementById('ctaRead').addEventListener('click', goStory);
+    document.getElementById('ctaPics').addEventListener('click', goGallery);
+
+    // ===== Lightbox =====
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCap = document.getElementById('lightboxCap');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src, cap, alt){
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      lightboxCap.textContent = cap || '';
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden','true');
+      lightboxImg.src = '';
+    }
+    document.querySelectorAll('.photo img, .thumb img').forEach(img=>{
+      img.addEventListener('click', ()=>{
+        const cap = img.closest('[data-cap]')?.getAttribute('data-cap') || img.alt || '';
+        openLightbox(img.getAttribute('src'), cap, img.alt);
+      });
+    });
+    lightbox.addEventListener('click', (e)=>{ if (e.target === lightbox) closeLightbox(); });
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    // ===== BOAR ALERT =====
+    const boarAlert = document.getElementById('boarAlert');
+    const boarAlertClose = document.getElementById('boarAlertClose');
+    let boarAlertMuted = false;
+
+    boarAlertClose.addEventListener('click', ()=>{
+      boarAlert.classList.remove('show');
+      boarAlertMuted = true;
+      setTimeout(()=> boarAlertMuted = false, 120000);
+    });
+
+    const boarHeader = document.getElementById('boar');
+    const boarObs = new IntersectionObserver((entries)=>{
+      const e = entries[0];
+      if (!e) return;
+      if (e.isIntersecting && !boarAlertMuted){
+        boarAlert.classList.add('show');
+        bumpHUD(2);
+        setParanoia(Math.max(state.paranoia, 78), true);
+      } else {
+        boarAlert.classList.remove('show');
+      }
+    }, { threshold: 0.25 });
+    if (boarHeader) boarObs.observe(boarHeader);
+
+    // ===== Meme Toast =====
+    const toast = document.getElementById('toast');
+    const toastWho = document.getElementById('toastWho');
+    const toastText = document.getElementById('toastText');
+    const toastMini = document.getElementById('toastMini');
+    const toastClose = document.getElementById('toastClose');
+    const spawnToastBtn = document.getElementById('spawnToast');
+
+    const memeLines = [
+      { who:"ЛЕС.COM", text:"Ваш запрос принят. В ответ выдаём: колючки, грязь и чувство вины.", tags:["#природа_не_сервис","#no_refunds"] },
+      { who:"КАБАН MOD", text:"Пост удалён. Пользователь: 'школьники'. Причина: 'слишком уверенные'.", tags:["#модерация","#рык"] },
+      { who:"ГРАВИЙ", text:"Я не злой. Я просто везде.", tags:["#вездесущий","#сыпучий"] },
+      { who:"ВЕТКИ-ОХРАНА", text:"Проход платный. Оплата: кожа, нервы, пакет.", tags:["#проход","#счёт_в_колючках"] },
+      { who:"ДОЖДЬ", text:"Я пришёл. Ты не готов. Это нормально.", tags:["#шторм","#классика"] },
+      { who:"НАДЕЖДА", text:"Я была 100%. Теперь я просто легенда.", tags:["#rip","#помним"] },
+      { who:"КАТАЛОНСКИЕ ПИРАТЫ", text:"Спасибо за инструменты. Мы любим минимализм: оставить вам ничего.", tags:["#сентябрь","#минус_инвентарь"] },
+    ];
+
+    function showToast(line){
+      toastWho.textContent = line.who;
+      toastText.textContent = line.text;
+      toastMini.innerHTML = '';
+      (line.tags || []).forEach(t=>{
+        const s = document.createElement('span');
+        s.className = 'chip';
+        s.textContent = t;
+        toastMini.appendChild(s);
+      });
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=> toast.classList.remove('show'), 4200);
+    }
+
+    function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+    function randomToast(){
+      showToast(memeLines[Math.floor(Math.random()*memeLines.length)]);
+      incCounter('swears', rand(1,3));
+      incCounter('aiblya', rand(0,2));
+      setParanoia(state.paranoia + rand(1,3), true);
+      tickStats();
+    }
+    spawnToastBtn.addEventListener('click', randomToast);
+    toastClose.addEventListener('click', ()=> toast.classList.remove('show'));
+
+    // ===== HUD + Counters =====
+    const boarHp = document.getElementById('boarHp');
+    const kidsHp = document.getElementById('kidsHp');
+    const hope = document.getElementById('hope');
+    const boarHpText = document.getElementById('boarHpText');
+    const kidsHpText = document.getElementById('kidsHpText');
+    const hopeText = document.getElementById('hopeText');
+
+    const fallsEl = document.getElementById('falls');
+    const bitesEl = document.getElementById('bites');
+    const swearsEl = document.getElementById('swears');
+    const aiblyaEl = document.getElementById('aiblya');
+
+    const paranoiaSlider = document.getElementById('paranoiaSlider');
+    const paranoiaValue = document.getElementById('paranoiaValue');
+    const paranoiaHint = document.getElementById('paranoiaHint');
+
+    const state = {
+      falls:0, bites:0, swears:0, aiblya:0,
+      kidsHP:100, boarHP:100, hope:100,
+      paranoia:0,
+      lockParanoia:false,
+      lockUntil:0
+    };
+
+    function incCounter(key, n=1){
+      state[key] += n;
+      if (state[key] < 0) state[key] = 0;
+      if (key === 'falls') fallsEl.textContent = state.falls;
+      if (key === 'bites') bitesEl.textContent = state.bites;
+      if (key === 'swears') swearsEl.textContent = state.swears;
+      if (key === 'aiblya') aiblyaEl.textContent = state.aiblya;
+    }
+
+    function setBar(el, txtEl, value){
+      const v = Math.max(0, Math.min(100, value));
+      el.style.width = v.toFixed(0) + '%';
+      txtEl.textContent = v.toFixed(0) + '%';
+    }
+
+    function tickStats(){
+      setBar(kidsHp, kidsHpText, state.kidsHP);
+      setBar(boarHp, boarHpText, state.boarHP);
+      setBar(hope, hopeText, state.hope);
+    }
+    tickStats();
+
+    function bumpHUD(level=1){
+      const hud = document.getElementById('hud');
+      hud.animate([
+        { transform:'translate(0,0)' },
+        { transform:`translate(${level}px,-${level}px)` },
+        { transform:`translate(-${level}px,${level}px)` },
+        { transform:'translate(0,0)' }
+      ], { duration:240, iterations:1 });
+    }
+
+    // ===== Paranoia =====
+    function paranoiaLabel(v){
+      if (v < 10) return "Пока спокойно. Лес просто смотрит.";
+      if (v < 25) return "Что-то шуршит. Может ветер. Может сюжет.";
+      if (v < 45) return "Ты слишком внимательно слушаешь кусты.";
+      if (v < 65) return "Паранойя включилась. Глаз дёргается (символически).";
+      if (v < 85) return "Сохраняйся. Проверяй спину. Доверяй никому.";
+      return "Ты уже слышишь хрюк в MP3. Это тревожно, но канон.";
+    }
+
+    function applyParanoiaCSS(v){
+      document.documentElement.style.setProperty('--paranoia', String(v));
+      paranoiaValue.textContent = `${v.toFixed(0)}%`;
+      paranoiaHint.textContent = paranoiaLabel(v);
+    }
+
+    function setParanoia(v, fromAuto=false){
+      const now = Date.now();
+      if (fromAuto && state.lockParanoia && now < state.lockUntil) return;
+      state.paranoia = Math.max(0, Math.min(100, v));
+      paranoiaSlider.value = String(state.paranoia);
+      applyParanoiaCSS(state.paranoia);
+    }
+
+    paranoiaSlider.addEventListener('input', ()=>{
+      state.lockParanoia = true;
+      state.lockUntil = Date.now() + 20000;
+      setParanoia(Number(paranoiaSlider.value), false);
+    });
+
+    applyParanoiaCSS(0);
+
+    // ===== Image check (show missing paths) =====
+    const required = [
+      "./photos/01-forest.jpg",
+      "./photos/02-seedling.jpg",
+      "./photos/03-stairs.jpg",
+      "./photos/04-digging.jpg",
+      "./photos/05-hole.jpg",
+      "./photos/06-desk.jpg",
+      "./photos/07-supplies.jpg",
+      "./photos/08-homeplants.jpg"
+    ];
+    const errorsBox = document.getElementById('imgErrors');
+    const errorsList = document.getElementById('imgErrorsList');
+
+    function checkOne(src){
+      return new Promise((resolve)=>{
+        const i = new Image();
+        i.onload = ()=> resolve({src, ok:true});
+        i.onerror = ()=> resolve({src, ok:false});
+        i.src = src + "?v=" + Date.now();
+      });
+    }
+
+    (async ()=>{
+      const results = await Promise.all(required.map(checkOne));
+      const bad = results.filter(r=>!r.ok);
+      if (bad.length){
+        errorsBox.style.display = "block";
+        errorsList.innerHTML = bad.map(b=>`<div>— ${b.src}</div>`).join("");
+      }
+    })();
+
+    // ===== Hotkeys =====
+    window.addEventListener('keydown', (e)=>{
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      if (e.key.toLowerCase() === 'r') goStory();
+      if (e.key.toLowerCase() === 'g') goGallery();
+      if (e.key.toLowerCase() === 'm') randomToast();
+      if (e.key === 'Escape'){
+        closeLightbox();
+        toast.classList.remove('show');
+        boarAlert.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>
